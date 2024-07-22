@@ -1,4 +1,14 @@
+@font-face {
+    font-family: 'Roboto';
+    src:url('/fonts/roboto/Roboto-Regular.ttf') format('ttf'),
+		url('/fonts/roboto/Roboto-Bold.ttf') format('ttf');
+    font-weight: normal;
+    font-style: normal;
+}
 
+* {
+	font-family: 'Roboto', sans-serif;
+}
 
 html {
 	overflow-x: hidden;
@@ -10,13 +20,36 @@ body {
 	overflow-x: hidden;
 }
 
+#buttonHolder{
+	width:280px;
+	height: 250px;
+	border-style: dashed;
+	border-width: 1px;
+	border-color: #707070;
+	text-align: center;
+}
+
+.scriptButton{
+	margin-top: 10px;
+	margin-bottom: 10px;
+	width: 250px;
+	height: 30px;
+	color:white;
+	background-color: #303030;
+	opacity: .7;
+}
+.scriptButton:hover{
+	cursor: pointer;
+	opacity: 1;
+}
+
 #logoSection {
-	width: 200px;
+	width: 400px;
 	height: 225px;
 }
 
 #previewSection {
-	width: 200px;
+	width: 400px;
 	height: 355px;
 	display: inline-block;
 }
@@ -25,25 +58,17 @@ body {
 	
 }
 
-.scriptButton {
-	background-color: red;
-	width: 400px;
-}
-.thisButton{
-  color:#fff;
-  background:blue;
-}
 /* Let's get this party started */
 ::-webkit-scrollbar {
     width: 13px;
     opacity: 0;
 }
- 
+
 /* Track */
 ::-webkit-scrollbar-track {
 opacity: 0;
 }
- 
+
 /* Handle */
 ::-webkit-scrollbar-thumb {
     background: rgba(17, 17, 17, 1); 
