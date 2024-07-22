@@ -57,17 +57,13 @@
 	
 			thisName = key
 			thisButton = document.createElement("BUTTON");
-			thisButton.style.color = "#8a8a8a";
-			thisButton.style.background = "#232323";
-			thisButton.style.width = '200px';
-			thisButton.style.marginTop = "2px";
 			thisButton.innerHTML = thisName;
 			thisButton.setAttribute("class", "scriptButton");
 			thisButton.setAttribute("path", "A");
 			thisButton.setAttribute("onclick", "buttonClick( '" + value + "' )");
 			buttonHolder.appendChild(thisButton);
-			var br = document.createElement("br");
-			buttonHolder.appendChild(br);
+			// var br = document.createElement("br");
+			// buttonHolder.appendChild(br);
 	
 	
 		}
