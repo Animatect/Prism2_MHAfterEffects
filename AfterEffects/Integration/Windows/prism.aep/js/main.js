@@ -74,50 +74,26 @@
 	}	
 	
 	
-	function buttonClick(argumentValue){
-		var debug = 1;
-		if (debug === 1) {
-			var root = 'C:\\ProgramData\\Prism2'
-			var process = require('child_process');
-			var exec = process.exec;
-			var cmd = 'explorer '+root+'\\plugins\\AfterEffects\\Integration\\dev\\'+buttonElement;
 	
-			exec(cmd, function(err, stdout, stderr) {
-			});
-				
-			
-		} else {
-			var pythonExePath = "C:/Program Files/Prism2/Python39/python.exe";
-			var scriptPath = "c:/ProgramData/Prism2/plugins/AfterEffects/Scripts/Prism_AfterEffects_MenuTools.py";
-			var command = '"' + pythonExePath + '" "' + scriptPath + '" "' + argumentValue + '"';
-			var exec = require('child_process').exec;
-			exec(command)
-		}
-			
-	}
-	
-	
-	
-	
-	
-	
-	
-	function buttonClick(buttonElement){
+	function buttonClick(buttonElement){// Define the path to the .cmd file		
+		const { exec } = require('child_process');
+		const path = require('path');
+		const cmdFilePath = CMDSDIR+"/"+buttonElement;
 		
-		var cmdsdir = CMDSDIR
-		var process = require('child_process');
-		var exec = process.exec;
-		var cmd = 'explorer '+cmdsdir+buttonElement;
-			
-		exec(cmd, function(err, stdout, stderr) {
+		// Execute the .cmd file
+		exec(`"${cmdFilePath}"`, (error, stdout, stderr) => {
+			if (error) {
+				console.error(`Error executing command: ${error}`);
+				return;
+			}
+			if (stderr) {
+				console.error(`stderr: ${stderr}`);
+				return;
+			}
+			console.log(`stdout: ${stdout}`);
 		});
-	
 	}
-	
-	
-	
-	
-	
+
 	function getOS() {
 		var userAgent = window.navigator.userAgent,
 		platform = window.navigator.platform,

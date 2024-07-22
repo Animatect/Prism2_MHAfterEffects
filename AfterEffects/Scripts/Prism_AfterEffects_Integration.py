@@ -34,6 +34,7 @@ import os
 import sys
 import platform
 import shutil
+import re
 
 from qtpy.QtCore import *
 from qtpy.QtGui import *
@@ -54,8 +55,23 @@ class Prism_AfterEffects_Integration(object):
 		self.core = core
 		self.plugin = plugin
 
-		#self.examplePath, self.afVersion = self.getAfterEffectsPath()
-		self.examplePath = "c:/Program Files/Common Files/Adobe/CEP/extensions/"
+		## EXAMPLE PATH ##
+		# Try appdata
+		appdata_roaming_adobe = os.path.join(os.getenv('APPDATA'), 'Adobe')
+		cep_extensions_path = os.path.join(appdata_roaming_adobe, 'CEP', 'extensions')
+		if os.path.exists(appdata_roaming_adobe):      
+			if not os.path.exists(os.path.dirname(cep_extensions_path)):
+				os.makedirs(os.path.dirname(cep_extensions_path))
+			if not os.path.exists(cep_extensions_path):
+				# Create the CEP\extensions folder if it doesn't exist
+				os.makedirs(cep_extensions_path)
+
+			self.examplePath = cep_extensions_path
+			#self.examplePath, self.afVersion = self.getAfterEffectsPath()
+		else:
+			self.examplePath = "c:/Program Files/Common Files/Adobe/CEP/extensions/"
+
+
 	@err_catcher(name=__name__)
 	def getAfterEffectsPath(self, single=True):
 		try:
@@ -171,21 +187,25 @@ class Prism_AfterEffects_Integration(object):
 					for file in files:
 						filetomodify = os.path.join(root, file)
 						if os.path.exists(filetomodify):
-							with open(filetomodify, "r") as init:
-									initStr = init.read()
+							# do the replacement.
+							patterns = {
+								"PRISMROOT" : self.core.prismRoot.replace("\\", "/"),
+								"PRISMPYTHONFOLDER" : self.getPrismPython().replace("\\", "/"),
+								"SCRIPTSFOLDER" : os.path.dirname(__file__).replace("\\", "/"),        
+								}
 
-							with open(filetomodify, "w") as init:
-								initStr = initStr.replace(
-									"PRISMROOT", '"%s"' % self.core.prismRoot.replace(
-										"\\", "/")
-								)
-								initStr = initStr.replace(
-									"PRISMPYTHONFOLDER", '"%s"' % self.getPrismPython().replace('\\', '/')
-								)
-								initStr = initStr.replace(
-									"SCRIPTSFOLDER", '"%s"' % os.path.dirname(__file__).replace('\\', '/')
-								)
-								init.write(initStr)
+							with open(filetomodify, "r") as file:
+									content = file.read()
+							# Replace each pattern with its replacement
+							for pattern, replacement in patterns.items():
+								# Create a regex pattern for the exact match of the pattern
+								regex_pattern = re.compile(re.escape(pattern))
+								# Replace the pattern with the replacement
+								content = regex_pattern.sub(replacement, content)
+
+							# Write the modified content back to the file
+							with open(filetomodify, "w") as file:
+								file.write(content)
 
 			return True
 
